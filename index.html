@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLOG.</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TURBO.</title>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,156 +11,459 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        zinc: {
-                            850: '#1f1f22',
-                            950: '#09090b', // Deep black/zinc background
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
+        :root {
+            --bg-color: #09090b;
+            --bg-card: #18181b;
+            --text-main: #e4e4e7;
+            --text-muted: #a1a1aa;
+            --primary: #dc2626; /* Red */
+            --primary-hover: #b91c1c;
+            --border-color: #27272a;
+            --overlay: rgba(0, 0, 0, 0.7);
+        }
+
+        * {
+            box-sizing: border_box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #09090b;
-            color: #e4e4e7;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Utilities */
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { display: block; max-width: 100%; }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
+        
+        .hidden { display: none !important; }
+        
+        /* Grid System */
+        .grid { display: grid; gap: 2rem; }
+        .grid-cols-1 { grid-template-columns: 1fr; }
+        
+        @media (min-width: 768px) {
+            .md-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .md-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            .md-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+            .md-flex { display: flex !important; }
+            .md-hidden { display: none !important; }
+            .md-block { display: block !important; }
+            .col-span-2 { grid-column: span 2; }
+        }
+
+        /* Typography */
+        h1, h2, h3, h4 { color: white; line-height: 1.2; font-weight: 700; }
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        p { color: var(--text-muted); }
+        .text-primary { color: var(--primary); }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wide { letter-spacing: 0.05em; }
+        .font-bold { font-weight: 700; }
+
+        /* Navbar */
+        #navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        #navbar.scrolled {
+            background: rgba(9, 9, 11, 0.95);
+            padding: 1rem 0;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
         }
         
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
+        .logo-box {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .nav-link {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-link.active { color: white; }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s, background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-muted);
+        }
+        .btn-ghost:hover {
+            color: white;
         }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: #000;
         }
-        ::-webkit-scrollbar-track {
-            background: #09090b; 
+        .hero-bg-accent {
+            position: absolute;
+            top: 0; right: 0;
+            width: 60%; height: 100%;
+            background: linear-gradient(to left, #18181b, transparent);
+            opacity: 0.3;
+            transform: skewX(-12deg) translateX(100px);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #27272a; 
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+        }
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .hero-title { font-size: 4.5rem; }
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #fff, #71717a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-image-container {
+            position: relative;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            height: 400px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        @media (min-width: 768px) {
+            .hero-image-container { height: 600px; }
+        }
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.7;
+            transition: transform 0.7s, opacity 0.7s;
+        }
+        .hero-image-container:hover img {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #3f3f46;
+        }
+        .card-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .card:hover .card-image img {
+            transform: scale(1.1);
+        }
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .tag {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #dc2626; 
+        .card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #71717a;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .card-meta span { display: flex; align-items: center; gap: 0.25rem; }
+        .card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: white;
+            transition: color 0.2s;
+        }
+        .card:hover .card-title { color: var(--primary); }
+        .card-excerpt {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Article View */
+        .article-view {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        .article-header { margin-bottom: 2rem; }
+        .article-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        .article-image img { width: 100%; height: 100%; object-fit: cover; }
+        .prose p { margin-bottom: 1.5rem; font-size: 1.125rem; color: #d4d4d8; }
+        .prose h3 { margin-top: 2rem; margin-bottom: 1rem; color: white; }
+        
+        /* Footer */
+        footer {
+            background-color: #000;
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0;
+            margin-top: 5rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .input-field {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-family: inherit;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
-        /* Fade in animation */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+        /* Mobile Menu */
+        #mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
+        .mobile-nav-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            text-align: left;
+            font-size: 1.125rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
     </style>
 </head>
-<body class="antialiased selection:bg-red-500 selection:text-white">
+<body>
 
     <!-- Navigation -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-6 bg-transparent">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+    <nav id="navbar">
+        <div class="container flex justify-between items-center">
             <!-- Logo -->
-            <div onclick="navigateTo('home')" class="cursor-pointer flex items-center gap-2 group">
-                <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform">
-                    <span class="text-white font-bold text-lg">B</span>
+            <div onclick="navigateTo('home')" style="cursor: pointer;" class="flex items-center gap-2">
+                <div class="logo-box">
+                    <span>T</span>
                 </div>
-                <span class="text-2xl font-bold text-white tracking-tighter">BLOG<span class="text-red-600">.</span></span>
+                <span style="font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; color: white;">
+                    TURBO<span class="text-primary">.</span>
+                </span>
             </div>
 
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center gap-8">
-                <button onclick="navigateTo('home')" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest">Home</button>
-                <button onclick="navigateTo('articles')" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest">Articles</button>
-                <button onclick="navigateTo('tutorials')" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest">Tutorials</button>
-                <button onclick="navigateTo('about')" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest">About</button>
-                <button class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full text-sm font-medium transition-all shadow-lg shadow-red-600/30 hover:scale-105">Subscribe</button>
+            <div class="md-flex items-center gap-8 hidden">
+                <button onclick="navigateTo('home')" class="nav-link active">Home</button>
+                <button onclick="navigateTo('articles')" class="nav-link">Reviews</button>
+                <button onclick="navigateTo('tutorials')" class="nav-link">Builds</button>
+                <button onclick="navigateTo('about')" class="nav-link">About</button>
+                <button class="btn btn-primary">Subscribe</button>
             </div>
 
             <!-- Mobile Toggle -->
-            <button id="mobile-menu-btn" class="md:hidden text-white">
-                <i data-lucide="menu" class="w-7 h-7"></i>
+            <button id="mobile-menu-btn" class="md-hidden" style="background:none; border:none; color: white;">
+                <i data-lucide="menu" style="width: 28px; height: 28px;"></i>
             </button>
         </div>
 
         <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-zinc-900 border-t border-zinc-800 p-6 flex flex-col gap-4 shadow-2xl">
-            <button onclick="handleMobileNav('home')" class="text-left text-lg font-medium text-gray-300 hover:text-white py-2">Home</button>
-            <button onclick="handleMobileNav('articles')" class="text-left text-lg font-medium text-gray-300 hover:text-white py-2">Articles</button>
-            <button onclick="handleMobileNav('tutorials')" class="text-left text-lg font-medium text-gray-300 hover:text-white py-2">Tutorials</button>
-            <button onclick="handleMobileNav('about')" class="text-left text-lg font-medium text-gray-300 hover:text-white py-2">About</button>
+        <div id="mobile-menu" class="hidden">
+            <button onclick="handleMobileNav('home')" class="mobile-nav-btn">Home</button>
+            <button onclick="handleMobileNav('articles')" class="mobile-nav-btn">Reviews</button>
+            <button onclick="handleMobileNav('tutorials')" class="mobile-nav-btn">Builds</button>
+            <button onclick="handleMobileNav('about')" class="mobile-nav-btn">About</button>
         </div>
     </nav>
 
     <!-- Main Content Injection Point -->
-    <main id="app-content" class="min-h-screen pt-20">
+    <main id="app-content" style="padding-top: 80px; min-height: 100vh;">
         <!-- Content renders here via JS -->
     </main>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-zinc-900 py-12 mt-20">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-12 mb-12">
+    <footer>
+        <div class="container">
+            <div class="grid md-grid-cols-4 gap-8" style="margin-bottom: 3rem;">
                 <div class="col-span-2">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-6 h-6 bg-red-600 rounded flex items-center justify-center">
-                            <span class="text-white font-bold text-xs">B</span>
+                    <div class="flex items-center gap-2" style="margin-bottom: 1.5rem;">
+                        <div class="logo-box" style="width: 24px; height: 24px; font-size: 0.75rem;">
+                            <span>T</span>
                         </div>
-                        <span class="text-xl font-bold text-white tracking-tighter">BLOG<span class="text-red-600">.</span></span>
+                        <span style="font-size: 1.25rem; font-weight: 800; color: white;">TURBO<span class="text-primary">.</span></span>
                     </div>
-                    <p class="text-gray-500 max-w-sm mb-6">
-                        Sharing insights on web development, modern UI design, and the future of tech. Built for developers by developers.
+                    <p style="max-width: 300px; margin-bottom: 1.5rem;">
+                        Fueled by passion, driven by design. The ultimate destination for automotive culture, reviews, and restoration projects.
                     </p>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:text-white hover:bg-zinc-800 transition-colors">
-                            <i data-lucide="twitter" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:text-white hover:bg-zinc-800 transition-colors">
-                            <i data-lucide="github" class="w-5 h-5"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center text-gray-400 hover:text-white hover:bg-zinc-800 transition-colors">
-                            <i data-lucide="linkedin" class="w-5 h-5"></i>
-                        </a>
+                        <a href="#" style="color: var(--text-muted);"><i data-lucide="twitter"></i></a>
+                        <a href="#" style="color: var(--text-muted);"><i data-lucide="instagram"></i></a>
+                        <a href="#" style="color: var(--text-muted);"><i data-lucide="youtube"></i></a>
                     </div>
                 </div>
                 
                 <div>
-                    <h4 class="text-white font-bold mb-6">Explore</h4>
-                    <ul class="space-y-4 text-gray-500 text-sm">
-                        <li><a href="#" onclick="navigateTo('articles')" class="hover:text-red-500 transition-colors">Articles</a></li>
-                        <li><a href="#" onclick="navigateTo('tutorials')" class="hover:text-red-500 transition-colors">Tutorials</a></li>
-                        <li><a href="#" class="hover:text-red-500 transition-colors">Tags</a></li>
-                        <li><a href="#" class="hover:text-red-500 transition-colors">Authors</a></li>
+                    <h4 style="margin-bottom: 1.5rem;">Explore</h4>
+                    <ul style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem; color: var(--text-muted);">
+                        <li><a href="#" onclick="navigateTo('articles')">Car Reviews</a></li>
+                        <li><a href="#" onclick="navigateTo('tutorials')">Project Builds</a></li>
+                        <li><a href="#">Supercars</a></li>
+                        <li><a href="#">Classics</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-white font-bold mb-6">Newsletter</h4>
-                    <p class="text-gray-500 text-sm mb-4">Stay updated with our latest releases.</p>
-                    <div class="flex gap-2">
-                        <input type="email" placeholder="Email address" class="bg-zinc-900 border border-zinc-800 text-white px-4 py-2 rounded-lg w-full focus:outline-none focus:border-red-600 text-sm">
-                        <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <h4 style="margin-bottom: 1.5rem;">Newsletter</h4>
+                    <p style="margin-bottom: 1rem; font-size: 0.9rem;">Get the latest automotive news weekly.</p>
+                    <div class="input-group">
+                        <input type="email" placeholder="Email address" class="input-field">
+                        <button class="btn btn-primary" style="padding: 0.5rem 1rem;">
+                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-zinc-900 pt-8 flex flex-col md:flex-row justify-between items-center text-zinc-600 text-sm">
-                <p>&copy; 2024 Blog Platform. All rights reserved.</p>
-                <div class="flex gap-6 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-zinc-400">Privacy</a>
-                    <a href="#" class="hover:text-zinc-400">Terms</a>
+            <div style="border-top: 1px solid var(--border-color); padding-top: 2rem; display: flex; justify-content: space-between; color: #52525b; font-size: 0.875rem;">
+                <p>&copy; 2024 TURBO Automotive. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
                 </div>
             </div>
         </div>
@@ -175,47 +475,47 @@
         const POSTS = [
             {
                 id: 1,
-                title: "The Future of React Server Components",
-                excerpt: "Exploring how RSCs are changing the landscape of modern web development and what it means for frontend performance.",
-                content: `<p class="mb-4 text-lg text-gray-300">React Server Components (RSC) represent a paradigm shift in how we build React applications. By allowing components to render exclusively on the server, we can significantly reduce the amount of JavaScript sent to the client.</p><h3 class="text-2xl font-bold text-white mt-8 mb-4">Why It Matters</h3><p class="mb-4 text-gray-400">Traditional React apps often suffer from large bundle sizes. With RSC, dependencies used only for server-side logic (like markdown parsers or database clients) never leave the server.</p>`,
-                date: "Oct 12, 2023",
+                title: "The Electric Revolution: Beyond the Hype",
+                excerpt: "We test drive the latest EV hypercars to see if the soul of driving can survive without an internal combustion engine.",
+                content: `<p>The silence is deafening, but the acceleration is violent. As we transition into a fully electric future, enthusiasts are asking one critical question: Where is the emotion?</p><h3 class="text-white">Instant Torque</h3><p>There is no denying the performance benefits. 0-60 times have dropped below 2 seconds. But without the roar of a V12 or the whine of a supercharger, something feels missing.</p><h3>The Verdict</h3><p>EVs are technically superior, but for the weekend drive, we might still reach for the keys to the vintage manual.</p>`,
+                date: "Oct 12, 2024",
                 readTime: "5 min read",
-                tags: ["React", "Performance", "Web"],
+                tags: ["EV", "Hypercar", "Future"],
                 type: "article",
-                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1593055365545-2b46702e53bd?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 2,
-                title: "Mastering CSS Grid Layouts",
-                excerpt: "A comprehensive guide to building complex, responsive 2D layouts using native CSS Grid properties.",
-                content: `<p class="mb-4 text-lg text-gray-300">CSS Grid has revolutionized web layout design. Unlike Flexbox, which is largely one-dimensional, Grid allows us to handle both columns and rows simultaneously.</p><h3 class="text-2xl font-bold text-white mt-8 mb-4">The Basics</h3><p class="mb-4 text-gray-400">Defining a grid container is as simple as <code>display: grid</code>. From there, the power of <code>grid-template-columns</code> and <code>grid-template-rows</code> takes over.</p>`,
-                date: "Nov 03, 2023",
-                readTime: "8 min read",
-                tags: ["CSS", "Design", "Tutorial"],
+                title: "Restoring a 1967 Shelby GT500",
+                excerpt: "A two-year journey of rust, sweat, and gears. How we brought an American legend back to life from a barn find.",
+                content: `<p>It started as a shell in a barn in Oklahoma. Mice had made a home in the intake manifold, and the floor pans were non-existent. But the VIN tag was authentic.</p><h3>The Teardown</h3><p>Every bolt was bagged and tagged. We sandblasted the chassis down to bare metal, revealing the scars of the last 50 years.</p><h3>First Start</h3><p>After a full engine rebuild, hearing that 428 Cobra Jet fire up for the first time was worth every scraped knuckle.</p>`,
+                date: "Nov 03, 2024",
+                readTime: "12 min read",
+                tags: ["Classic", "Restoration", "Muscle"],
                 type: "tutorial",
-                image: "https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 3,
-                title: "TypeScript Best Practices for 2024",
-                excerpt: "Stop using 'any' and start leveraging the full power of TypeScript's type inference and utility types.",
-                content: `<p class="mb-4 text-lg text-gray-300">TypeScript is only as good as how strictly you use it. In this guide, we'll cover advanced types, generics, and why you should avoid the <code>any</code> type at all costs.</p><h3 class="text-2xl font-bold text-white mt-8 mb-4">Utility Types</h3><p class="mb-4 text-gray-400">Partial, Pick, Omit, and Readonly are your friends. They allow you to transform existing types into new ones without redundancy.</p>`,
-                date: "Dec 15, 2023",
-                readTime: "6 min read",
-                tags: ["TypeScript", "Code", "Best Practices"],
+                title: "Track Day Essentials: Under $30k",
+                excerpt: "You don't need a Porsche GT3 to have fun on the circuit. Here are our top 5 picks for budget track weapons.",
+                content: `<p>Racing is expensive, but it doesn't have to bankrupt you. We looked at the used market for cars that offer reliability, handling, and aftermarket support.</p><h3>The Mazda Miata (ND)</h3><p>The answer is always Miata. Lightweight, rear-wheel drive, and tires are cheap. It teaches you momentum driving like no other car.</p><h3>Honda Civic Type R</h3><p>If you need to haul groceries during the week and set lap records on Sunday, the hot hatch king still reigns supreme.</p>`,
+                date: "Dec 15, 2024",
+                readTime: "8 min read",
+                tags: ["Track", "Guide", "Budget"],
                 type: "tutorial",
-                image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1532588213355-52317771cce6?auto=format&fit=crop&q=80&w=800"
             },
             {
                 id: 4,
-                title: "Minimalism in UI Design",
-                excerpt: "Why less is often more. Analyzing the trend of stripped-back interfaces and high-contrast typography.",
-                content: `<p class="mb-4 text-lg text-gray-300">Minimalism isn't just about white space; it's about focus. By removing distractions, we guide the user's attention to what truly matters: the content.</p>`,
-                date: "Jan 20, 2024",
-                readTime: "4 min read",
-                tags: ["Design", "UI/UX"],
+                title: "The Art of Aerodynamics",
+                excerpt: "Understanding downforce, drag coefficients, and how active aero is changing the way cars look and handle.",
+                content: `<p>Form follows function. In the world of high-speed automotive design, the air is your biggest enemy and your greatest ally.</p>`,
+                date: "Jan 20, 2025",
+                readTime: "6 min read",
+                tags: ["Design", "Engineering"],
                 type: "article",
-                image: "https://images.unsplash.com/photo-1509343256512-d77a5cb3791b?auto=format&fit=crop&q=80&w=800"
+                image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=800"
             }
         ];
 
@@ -229,24 +529,24 @@
             
             // Update active state in nav
             document.querySelectorAll('.nav-link').forEach(link => {
-                if(link.innerText.toLowerCase() === view) {
-                    link.classList.add('text-white');
-                    link.classList.remove('text-gray-300');
+                if(link.getAttribute('onclick').includes(`'${view}'`)) {
+                    link.classList.add('active');
+                    link.style.color = 'white';
                 } else {
-                    link.classList.remove('text-white');
-                    link.classList.add('text-gray-300');
+                    link.classList.remove('active');
+                    link.style.color = '';
                 }
             });
 
             const contentEl = document.getElementById('app-content');
             
-            // Basic Router
+            // Router
             if (view === 'home') {
                 contentEl.innerHTML = renderHome();
             } else if (view === 'articles') {
-                contentEl.innerHTML = renderGrid('Articles', POSTS.filter(p => p.type === 'article' || !p.type));
+                contentEl.innerHTML = renderGrid('Reviews', POSTS.filter(p => p.type === 'article' || !p.type));
             } else if (view === 'tutorials') {
-                contentEl.innerHTML = renderGrid('Tutorials', POSTS.filter(p => p.type === 'tutorial'));
+                contentEl.innerHTML = renderGrid('Builds & Guides', POSTS.filter(p => p.type === 'tutorial'));
             } else if (view === 'about') {
                 contentEl.innerHTML = renderAbout();
             } else if (view === 'post' && data) {
@@ -268,41 +568,39 @@
             return `
                 <div class="fade-in">
                     <!-- Hero Section -->
-                    <div class="relative min-h-[85vh] flex items-center overflow-hidden bg-zinc-950">
-                        <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-zinc-900 to-transparent opacity-50 skew-x-12 translate-x-32 pointer-events-none"></div>
-                        <div class="absolute bottom-0 left-0 w-1/2 h-full bg-gradient-to-t from-black via-transparent to-transparent z-10 pointer-events-none"></div>
+                    <div class="hero">
+                        <div class="hero-bg-accent"></div>
                         
-                        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-20 w-full">
-                            <div class="space-y-8">
-                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-800/50 border border-zinc-700 text-red-500 text-xs font-bold tracking-widest uppercase">
-                                    <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                                    New Content Live
+                        <div class="container" style="position: relative; z-index: 20;">
+                            <div class="grid md-grid-cols-2 items-center" style="gap: 4rem;">
+                                <div class="hero-content">
+                                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 99px; background: rgba(39, 39, 42, 0.5); border: 1px solid var(--border-color); color: var(--primary); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem;">
+                                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></span>
+                                        New Review Dropped
+                                    </div>
+                                    <h1 class="hero-title" style="line-height: 1.1; font-weight: 800; color: white;">
+                                        Drive the <br />
+                                        <span class="gradient-text">Extraordinary</span>
+                                    </h1>
+                                    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px;">
+                                        A curated collection of automotive excellence. From vintage restoration projects to the cutting edge of hypercar technology.
+                                    </p>
+                                    <div class="flex gap-4">
+                                        <button onclick="navigateTo('articles')" class="btn btn-primary">
+                                            Read Reviews
+                                        </button>
+                                        <button onclick="navigateTo('tutorials')" class="btn btn-ghost">
+                                            View Builds <i data-lucide="arrow-right" style="width: 16px;"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <h1 class="text-5xl md:text-7xl font-bold text-white leading-tight tracking-tight">
-                                    Find your <br />
-                                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">Next Big Idea</span>
-                                </h1>
-                                <p class="text-gray-400 text-lg md:text-xl max-w-md leading-relaxed">
-                                    Explore a curated collection of thoughts on development, design, and the digital future.
-                                </p>
-                                <div class="flex flex-wrap gap-4">
-                                    <button onclick="navigateTo('articles')" class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-medium transition-all hover:scale-105 shadow-lg shadow-red-600/30">
-                                        Read Articles
-                                    </button>
-                                    <button onclick="navigateTo('tutorials')" class="text-gray-300 hover:text-white px-8 py-4 font-medium flex items-center gap-2 group">
-                                        Browse Tutorials <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                                    </button>
-                                </div>
-                            </div>
 
-                            <div class="relative h-[400px] md:h-[600px] w-full hidden md:block">
-                                <div class="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent rounded-3xl transform rotate-3 scale-95 pointer-events-none"></div>
-                                <div class="relative h-full w-full rounded-3xl overflow-hidden shadow-2xl border border-zinc-800 group">
-                                   <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=1000" class="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700 transform group-hover:scale-105" alt="Hero">
-                                   <div class="absolute bottom-0 left-0 p-8 w-full">
-                                      <div class="bg-black/80 backdrop-blur-md p-6 rounded-2xl border border-zinc-700/50">
-                                         <h3 class="text-white font-bold text-xl mb-2">Featured: System Design</h3>
-                                         <p class="text-gray-400 text-sm">Understanding distributed systems at scale.</p>
+                                <div class="hero-image-container md-block hidden">
+                                   <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1000" alt="Hero Car">
+                                   <div style="position: absolute; bottom: 0; left: 0; padding: 2rem; width: 100%;">
+                                      <div style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1);">
+                                         <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: white;">Featured: McLaren P1</h3>
+                                         <p style="font-size: 0.875rem; color: var(--text-muted);">The hybrid hypercar that changed everything.</p>
                                       </div>
                                    </div>
                                 </div>
@@ -311,17 +609,19 @@
                     </div>
 
                     <!-- Latest Posts Section -->
-                    <div class="py-24 bg-black">
-                        <div class="max-w-7xl mx-auto px-6">
-                            <div class="flex justify-between items-end mb-12">
+                    <div style="background: #000; padding: 6rem 0;">
+                        <div class="container">
+                            <div class="flex justify-between items-center" style="margin-bottom: 3rem;">
                                 <div>
-                                    <h2 class="text-3xl font-bold text-white mb-4">Latest Insights</h2>
-                                    <p class="text-gray-500">Fresh from the editor's desk.</p>
+                                    <h2 style="margin-bottom: 0.5rem; color: white;">Latest Stories</h2>
+                                    <p>Fresh from the track and the garage.</p>
                                 </div>
-                                <button onclick="navigateTo('articles')" class="text-red-500 font-bold hover:text-red-400 flex items-center gap-2">View all <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                                <button onclick="navigateTo('articles')" class="btn btn-ghost" style="color: var(--primary);">
+                                    View all <i data-lucide="arrow-right" style="width: 16px;"></i>
+                                </button>
                             </div>
                             
-                            <div class="grid md:grid-cols-3 gap-8">
+                            <div class="grid md-grid-cols-3">
                                 ${POSTS.slice(0, 3).map(post => createPostCard(post)).join('')}
                             </div>
                         </div>
@@ -331,27 +631,26 @@
         }
 
         function createPostCard(post) {
-            // Need to serialize the post object to pass it in onclick, handling quotes
+            // Serialize for click handler
             const postString = JSON.stringify(post).replace(/"/g, '&quot;');
             
             return `
-                <div onclick="navigateTo('post', ${postString})" class="group bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-zinc-700 transition-all cursor-pointer flex flex-col h-full hover:-translate-y-1">
-                    <div class="relative h-48 overflow-hidden">
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10"></div>
-                        <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute top-4 left-4 z-20 flex gap-2">
-                            ${post.tags.slice(0, 2).map(tag => `<span class="px-2 py-1 text-xs font-bold bg-black/60 backdrop-blur-sm text-white rounded-md uppercase tracking-wider">${tag}</span>`).join('')}
+                <div onclick="navigateTo('post', ${postString})" class="card">
+                    <div class="card-image">
+                        <img src="${post.image}" alt="${post.title}">
+                        <div style="position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem;">
+                            ${post.tags.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
                         </div>
                     </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <div class="flex items-center gap-4 text-xs text-gray-500 mb-4 font-medium uppercase tracking-wide">
-                            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3 text-red-500"></i> ${post.date}</span>
-                            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-red-500"></i> ${post.readTime}</span>
+                    <div class="card-content">
+                        <div class="card-meta">
+                            <span><i data-lucide="calendar" style="width:12px; color: var(--primary);"></i> ${post.date}</span>
+                            <span><i data-lucide="clock" style="width:12px; color: var(--primary);"></i> ${post.readTime}</span>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3 group-hover:text-red-500 transition-colors leading-tight">${post.title}</h3>
-                        <p class="text-gray-400 text-sm line-clamp-3 mb-6 flex-grow leading-relaxed">${post.excerpt}</p>
-                        <div class="flex items-center text-sm font-bold text-white group-hover:translate-x-2 transition-transform duration-300">
-                            Read Article <i data-lucide="chevron-right" class="w-4 h-4 ml-1 text-red-500"></i>
+                        <h3 class="card-title">${post.title}</h3>
+                        <p class="card-excerpt">${post.excerpt}</p>
+                        <div style="margin-top: auto; display: flex; align-items: center; font-size: 0.875rem; font-weight: 700; color: white;">
+                            Read Story <i data-lucide="chevron-right" style="width: 16px; margin-left: 4px; color: var(--primary);"></i>
                         </div>
                     </div>
                 </div>
@@ -360,51 +659,51 @@
 
         function renderGrid(title, posts) {
             return `
-                <div class="fade-in max-w-7xl mx-auto px-6 py-12">
-                    <div class="mb-12 pt-12">
-                        <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">${title}</h1>
-                        <p class="text-xl text-gray-400 max-w-2xl">Browse our collection of ${title.toLowerCase()}. Filter by tags or search below.</p>
+                <div class="fade-in container" style="padding: 3rem 1.5rem;">
+                    <div style="margin-bottom: 4rem; padding-top: 2rem;">
+                        <h1 style="margin-bottom: 1rem;">${title}</h1>
+                        <p style="font-size: 1.25rem; max-width: 600px;">Browse our collection of ${title.toLowerCase()}. Filter by tags or search below.</p>
                     </div>
                     
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="grid md-grid-cols-3">
                         ${posts.map(post => createPostCard(post)).join('')}
                     </div>
                     
-                    ${posts.length === 0 ? '<div class="text-center py-20 text-gray-500">No posts found.</div>' : ''}
+                    ${posts.length === 0 ? '<div style="text-align: center; padding: 5rem; color: var(--text-muted);">No posts found.</div>' : ''}
                 </div>
             `;
         }
 
         function renderPost(post) {
             return `
-                <article class="fade-in max-w-4xl mx-auto px-6 py-12">
-                    <button onclick="navigateTo('home')" class="mb-8 flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-medium uppercase tracking-widest">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Home
+                <article class="fade-in article-view">
+                    <button onclick="navigateTo('home')" class="btn btn-ghost" style="padding-left: 0; margin-bottom: 2rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 1px;">
+                        <i data-lucide="arrow-left" style="width: 16px; margin-right: 0.5rem;"></i> Back to Home
                     </button>
                     
-                    <div class="mb-8">
-                        <div class="flex gap-2 mb-6">
-                             ${post.tags.map(tag => `<span class="px-3 py-1 text-xs font-bold bg-zinc-800 text-gray-300 rounded-full uppercase tracking-wider">${tag}</span>`).join('')}
+                    <div class="article-header">
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                             ${post.tags.map(tag => `<span style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">${tag}</span>`).join('')}
                         </div>
-                        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">${post.title}</h1>
-                        <div class="flex items-center gap-6 text-sm text-gray-400 border-b border-zinc-800 pb-8">
-                            <span class="flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4 text-red-500"></i> ${post.date}</span>
-                            <span class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-red-500"></i> ${post.readTime}</span>
-                            <span class="flex items-center gap-2"><i data-lucide="user" class="w-4 h-4 text-red-500"></i> Admin</span>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem; line-height: 1.1;">${post.title}</h1>
+                        <div style="display: flex; gap: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 2rem; font-size: 0.875rem; color: var(--text-muted);">
+                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="calendar" style="width: 16px; color: var(--primary);"></i> ${post.date}</span>
+                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="clock" style="width: 16px; color: var(--primary);"></i> ${post.readTime}</span>
+                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="user" style="width: 16px; color: var(--primary);"></i> Editor</span>
                         </div>
                     </div>
 
-                    <div class="relative w-full h-[400px] mb-12 rounded-2xl overflow-hidden shadow-2xl">
-                         <img src="${post.image}" alt="${post.title}" class="w-full h-full object-cover">
+                    <div class="article-image">
+                         <img src="${post.image}" alt="${post.title}">
                     </div>
 
-                    <div class="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-400 prose-a:text-red-500">
+                    <div class="prose">
                         ${post.content}
                     </div>
                     
-                    <div class="mt-20 pt-12 border-t border-zinc-800">
-                        <h3 class="text-2xl font-bold text-white mb-8">Related Posts</h3>
-                        <div class="grid md:grid-cols-2 gap-8">
+                    <div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--border-color);">
+                        <h3 style="margin-bottom: 2rem;">Related Stories</h3>
+                        <div class="grid md-grid-cols-2">
                              ${POSTS.filter(p => p.id !== post.id).slice(0, 2).map(p => createPostCard(p)).join('')}
                         </div>
                     </div>
@@ -414,21 +713,21 @@
         
         function renderAbout() {
             return `
-                <div class="fade-in max-w-4xl mx-auto px-6 py-20">
-                    <h1 class="text-5xl font-bold text-white mb-8">About Us.</h1>
-                    <p class="text-xl text-gray-400 leading-relaxed mb-8">
-                        We are a collective of developers and designers passionate about the open web. This blog serves as a digital garden where we plant ideas about React, CSS, System Design, and everything in between.
+                <div class="fade-in article-view" style="text-align: center;">
+                    <h1 style="margin-bottom: 2rem;">About TURBO.</h1>
+                    <p style="font-size: 1.25rem; margin-bottom: 3rem; color: var(--text-muted);">
+                        We are a collective of petrolheads, mechanics, and designers passionate about internal combustion and electric innovation.
                     </p>
-                    <div class="grid md:grid-cols-2 gap-8 mt-12">
-                        <div class="bg-zinc-900 p-8 rounded-2xl border border-zinc-800">
-                            <i data-lucide="code" class="w-12 h-12 text-red-500 mb-6"></i>
-                            <h3 class="text-2xl font-bold text-white mb-4">Technical Depth</h3>
-                            <p class="text-gray-400">We don't just skim the surface. We dive deep into the how and why of technology.</p>
+                    <div class="grid md-grid-cols-2" style="text-align: left;">
+                        <div style="background: var(--bg-card); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                            <i data-lucide="wrench" style="width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
+                            <h3 style="margin-bottom: 1rem; color: white;">Garage Built</h3>
+                            <p>We don't just write about cars; we work on them. Real experience, real grease, real results.</p>
                         </div>
-                        <div class="bg-zinc-900 p-8 rounded-2xl border border-zinc-800">
-                             <i data-lucide="book-open" class="w-12 h-12 text-red-500 mb-6"></i>
-                            <h3 class="text-2xl font-bold text-white mb-4">Clear Tutorials</h3>
-                            <p class="text-gray-400">Step-by-step guides that respect your time and boost your skills.</p>
+                        <div style="background: var(--bg-card); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                             <i data-lucide="gauge" style="width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
+                            <h3 style="margin-bottom: 1rem; color: white;">Speed & Style</h3>
+                            <p>Focusing on the intersection of automotive performance and visual aesthetics.</p>
                         </div>
                     </div>
                 </div>
@@ -441,18 +740,20 @@
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 20) {
-                nav.classList.add('bg-black/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800/50', 'py-4');
-                nav.classList.remove('py-6', 'bg-transparent');
+                nav.classList.add('scrolled');
             } else {
-                nav.classList.remove('bg-black/90', 'backdrop-blur-md', 'border-b', 'border-zinc-800/50', 'py-4');
-                nav.classList.add('py-6', 'bg-transparent');
+                nav.classList.remove('scrolled');
             }
         });
 
         // Mobile menu toggle
         document.getElementById('mobile-menu-btn').addEventListener('click', () => {
             const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
         });
 
         // Start App
