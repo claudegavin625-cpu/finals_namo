@@ -3,762 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TURBO.</title>
-    
-    <!-- Lucide Icons -->
+    <title>TURBO. - Home</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg-color: #09090b;
-            --bg-card: #18181b;
-            --text-main: #e4e4e7;
-            --text-muted: #a1a1aa;
-            --primary: #dc2626; /* Red */
-            --primary-hover: #b91c1c;
-            --border-color: #27272a;
-            --overlay: rgba(0, 0, 0, 0.7);
-        }
-
-        * {
-            box-sizing: border_box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Utilities */
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-        img { display: block; max-width: 100%; }
-        
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-center { justify-content: center; }
-        .gap-2 { gap: 0.5rem; }
-        .gap-4 { gap: 1rem; }
-        .gap-6 { gap: 1.5rem; }
-        .gap-8 { gap: 2rem; }
-        
-        .hidden { display: none !important; }
-        
-        /* Grid System */
-        .grid { display: grid; gap: 2rem; }
-        .grid-cols-1 { grid-template-columns: 1fr; }
-        
-        @media (min-width: 768px) {
-            .md-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-            .md-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-            .md-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
-            .md-flex { display: flex !important; }
-            .md-hidden { display: none !important; }
-            .md-block { display: block !important; }
-            .col-span-2 { grid-column: span 2; }
-        }
-
-        /* Typography */
-        h1, h2, h3, h4 { color: white; line-height: 1.2; font-weight: 700; }
-        h1 { font-size: 2.5rem; }
-        h2 { font-size: 2rem; }
-        h3 { font-size: 1.5rem; }
-        p { color: var(--text-muted); }
-        .text-primary { color: var(--primary); }
-        .text-sm { font-size: 0.875rem; }
-        .text-xs { font-size: 0.75rem; }
-        .uppercase { text-transform: uppercase; }
-        .tracking-wide { letter-spacing: 0.05em; }
-        .font-bold { font-weight: 700; }
-
-        /* Navbar */
-        #navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 1.5rem 0;
-            transition: all 0.3s ease;
-            background: transparent;
-        }
-        #navbar.scrolled {
-            background: rgba(9, 9, 11, 0.95);
-            padding: 1rem 0;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .logo-box {
-            width: 32px;
-            height: 32px;
-            background-color: var(--primary);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .nav-link {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.2s;
-        }
-        .nav-link:hover, .nav-link.active { color: white; }
-
-        /* Buttons */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: transform 0.2s, background-color 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 14px 0 rgba(220, 38, 38, 0.39);
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-        .btn-ghost {
-            background: transparent;
-            color: var(--text-muted);
-        }
-        .btn-ghost:hover {
-            color: white;
-        }
-
-        /* Hero Section */
-        .hero {
-            position: relative;
-            min-height: 85vh;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            background: #000;
-        }
-        .hero-bg-accent {
-            position: absolute;
-            top: 0; right: 0;
-            width: 60%; height: 100%;
-            background: linear-gradient(to left, #18181b, transparent);
-            opacity: 0.3;
-            transform: skewX(-12deg) translateX(100px);
-        }
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-        }
-        .hero-title {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .hero-title { font-size: 4.5rem; }
-        }
-        .gradient-text {
-            background: linear-gradient(to right, #fff, #71717a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-image-container {
-            position: relative;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            height: 400px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        @media (min-width: 768px) {
-            .hero-image-container { height: 600px; }
-        }
-        .hero-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.7;
-            transition: transform 0.7s, opacity 0.7s;
-        }
-        .hero-image-container:hover img {
-            transform: scale(1.05);
-            opacity: 0.9;
-        }
-
-        /* Cards */
-        .card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #3f3f46;
-        }
-        .card-image {
-            height: 200px;
-            position: relative;
-            overflow: hidden;
-        }
-        .card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        .card:hover .card-image img {
-            transform: scale(1.1);
-        }
-        .card-content {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-        .tag {
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .card-meta {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.75rem;
-            color: #71717a;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .card-meta span { display: flex; align-items: center; gap: 0.25rem; }
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            color: white;
-            transition: color 0.2s;
-        }
-        .card:hover .card-title { color: var(--primary); }
-        .card-excerpt {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        /* Article View */
-        .article-view {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 3rem 1.5rem;
-        }
-        .article-header { margin-bottom: 2rem; }
-        .article-image {
-            width: 100%;
-            height: 400px;
-            border-radius: 1rem;
-            overflow: hidden;
-            margin-bottom: 3rem;
-        }
-        .article-image img { width: 100%; height: 100%; object-fit: cover; }
-        .prose p { margin-bottom: 1.5rem; font-size: 1.125rem; color: #d4d4d8; }
-        .prose h3 { margin-top: 2rem; margin-bottom: 1rem; color: white; }
-        
-        /* Footer */
-        footer {
-            background-color: #000;
-            border-top: 1px solid var(--border-color);
-            padding: 4rem 0;
-            margin-top: 5rem;
-        }
-        .input-group {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .input-field {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            width: 100%;
-            font-family: inherit;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Mobile Menu */
-        #mobile-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: var(--bg-card);
-            border-top: 1px solid var(--border-color);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .mobile-nav-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            text-align: left;
-            font-size: 1.125rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 0.5rem 0;
-        }
-
-        /* Animations */
-        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
-
-    </style>
 </head>
 <body>
 
     <!-- Navigation -->
     <nav id="navbar">
         <div class="container flex justify-between items-center">
-            <!-- Logo -->
-            <div onclick="navigateTo('home')" style="cursor: pointer;" class="flex items-center gap-2">
-                <div class="logo-box">
-                    <span>T</span>
-                </div>
-                <span style="font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; color: white;">
-                    TURBO<span class="text-primary">.</span>
-                </span>
-            </div>
-
-            <!-- Desktop Menu -->
-            <div class="md-flex items-center gap-8 hidden">
-                <button onclick="navigateTo('home')" class="nav-link active">Home</button>
-                <button onclick="navigateTo('articles')" class="nav-link">Reviews</button>
-                <button onclick="navigateTo('tutorials')" class="nav-link">Builds</button>
-                <button onclick="navigateTo('about')" class="nav-link">About</button>
+            <a href="index.html" class="flex items-center gap-2">
+                <div class="logo-box"><span>T</span></div>
+                <span style="font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; color: white;">TURBO<span class="text-primary">.</span></span>
+            </a>
+            <div class="md-flex items-center hidden">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="reviews.html" class="nav-link">Reviews</a>
+                <a href="builds.html" class="nav-link">Builds</a>
+                <a href="about.html" class="nav-link">About</a>
                 <button class="btn btn-primary">Subscribe</button>
             </div>
-
-            <!-- Mobile Toggle -->
             <button id="mobile-menu-btn" class="md-hidden" style="background:none; border:none; color: white;">
-                <i data-lucide="menu" style="width: 28px; height: 28px;"></i>
+                <i data-lucide="menu"></i>
             </button>
         </div>
-
-        <!-- Mobile Menu Overlay -->
         <div id="mobile-menu" class="hidden">
-            <button onclick="handleMobileNav('home')" class="mobile-nav-btn">Home</button>
-            <button onclick="handleMobileNav('articles')" class="mobile-nav-btn">Reviews</button>
-            <button onclick="handleMobileNav('tutorials')" class="mobile-nav-btn">Builds</button>
-            <button onclick="handleMobileNav('about')" class="mobile-nav-btn">About</button>
+            <a href="index.html" class="mobile-nav-btn">Home</a>
+            <a href="reviews.html" class="mobile-nav-btn">Reviews</a>
+            <a href="builds.html" class="mobile-nav-btn">Builds</a>
+            <a href="about.html" class="mobile-nav-btn">About</a>
         </div>
     </nav>
 
-    <!-- Main Content Injection Point -->
-    <main id="app-content" style="padding-top: 80px; min-height: 100vh;">
-        <!-- Content renders here via JS -->
-    </main>
+    <!-- NEW: Split Hero Section -->
+    <header class="split-hero fade-in">
+        <!-- Center Car Image (Absolute Positioned) -->
+        <img src="https://i.imgur.com/Q6X9v6m.png" alt="Red Sports Car Top View" class="hero-car-center">
+
+        <!-- Left Side: Dark (Reviews) -->
+        <div class="hero-half hero-left">
+            <div>
+                <span class="hero-sub text-primary">In-Depth Analysis</span>
+                <h1 class="hero-head">Find your<br>Dream Car.</h1>
+                <p class="hero-desc">Detailed reviews, track tests, and honest opinions on the latest machines hitting the road.</p>
+                <a href="reviews.html" class="btn btn-outline">Read Reviews</a>
+            </div>
+        </div>
+
+        <!-- Right Side: Light (Builds) -->
+        <div class="hero-half hero-right">
+            <div>
+                <span class="hero-sub text-primary">Garage Projects</span>
+                <h1 class="hero-head">Build your<br>Legacy.</h1>
+                <p class="hero-desc">From barn finds to track weapons. Follow our step-by-step restoration and tuning guides.</p>
+                <a href="builds.html" class="btn btn-outline-dark">Start Building</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section (From Reference) -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="grid md-grid-cols-4 items-center gap-8">
+                <div>
+                    <h2 style="font-size: 2rem; font-weight: 800; color: white; line-height: 1.1;">Why<br>TURBO?</h2>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #a1a1aa;">
+                        We don't just drive them; we break them down, fix them up, and push them to the limit.
+                    </p>
+                </div>
+                <div class="stat-item text-center md-text-left">
+                    <h3>100+</h3>
+                    <p>Cars Reviewed</p>
+                </div>
+                <div class="stat-item text-center md-text-left">
+                    <h3>10+</h3>
+                    <p>Years on Track</p>
+                </div>
+                <div class="stat-item text-center md-text-left">
+                    <h3>50+</h3>
+                    <p>Project Builds</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- "We Believe" Section (From Reference) -->
+    <section class="section-dark">
+        <div class="container feature-block">
+            <div class="feature-img">
+                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=1000" alt="Car Detail">
+            </div>
+            <div>
+                <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">We believe driving is more than just transport.</h2>
+                <p style="font-size: 1.1rem; color: #a1a1aa; margin-bottom: 2rem;">
+                    It's a connection between man and machine. Whether it's the perfect heel-toe downshift or the silence of an electric glide, we capture the stories that matter.
+                </p>
+                <div class="flex gap-4">
+                    <button class="btn btn-primary">Our Philosophy</button>
+                    <a href="about.html" class="btn btn-outline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Latest Posts Grid -->
+    <div style="background: #09090b; padding: 6rem 0;">
+        <div class="container">
+            <div class="flex justify-between items-center" style="margin-bottom: 3rem;">
+                <div>
+                    <h2 style="margin-bottom: 0.5rem; color: white;">Latest Stories</h2>
+                    <p style="color: #a1a1aa;">Fresh from the track and the garage.</p>
+                </div>
+                <a href="reviews.html" class="btn btn-outline" style="border: none; color: var(--primary);">
+                    View all <i data-lucide="arrow-right" style="width: 16px;"></i>
+                </a>
+            </div>
+            
+            <!-- Content injected by JS -->
+            <div id="recent-posts-grid" class="grid md-grid-cols-3"></div>
+        </div>
+    </div>
+
+    <!-- CTA Section (From Reference "Not Convinced Yet?") -->
+    <section style="position: relative; height: 500px; display: flex; align-items: center; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=2000" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.4;">
+        <div class="container" style="position: relative; z-index: 10; text-align: center;">
+            <h2 style="font-size: 3rem; margin-bottom: 1.5rem;">Ready to hit the road?</h2>
+            <p style="font-size: 1.25rem; color: #e4e4e7; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Join our newsletter and get exclusive access to our latest builds and invites to our track days.
+            </p>
+            <button class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">Subscribe Now</button>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="grid md-grid-cols-4 gap-8" style="margin-bottom: 3rem;">
+            <div class="grid md-grid-cols-4 gap-8">
                 <div class="col-span-2">
-                    <div class="flex items-center gap-2" style="margin-bottom: 1.5rem;">
-                        <div class="logo-box" style="width: 24px; height: 24px; font-size: 0.75rem;">
-                            <span>T</span>
-                        </div>
-                        <span style="font-size: 1.25rem; font-weight: 800; color: white;">TURBO<span class="text-primary">.</span></span>
+                    <div class="flex items-center gap-2" style="margin-bottom: 1rem;">
+                        <div class="logo-box"><span>T</span></div>
+                        <span style="font-size: 1.5rem; font-weight: 800; color: white;">TURBO.</span>
                     </div>
-                    <p style="max-width: 300px; margin-bottom: 1.5rem;">
-                        Fueled by passion, driven by design. The ultimate destination for automotive culture, reviews, and restoration projects.
-                    </p>
-                    <div class="flex gap-4">
-                        <a href="#" style="color: var(--text-muted);"><i data-lucide="twitter"></i></a>
-                        <a href="#" style="color: var(--text-muted);"><i data-lucide="instagram"></i></a>
-                        <a href="#" style="color: var(--text-muted);"><i data-lucide="youtube"></i></a>
-                    </div>
+                    <p style="color: #71717a; max-width: 300px;">The ultimate destination for automotive culture.</p>
                 </div>
-                
                 <div>
-                    <h4 style="margin-bottom: 1.5rem;">Explore</h4>
-                    <ul style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem; color: var(--text-muted);">
-                        <li><a href="#" onclick="navigateTo('articles')">Car Reviews</a></li>
-                        <li><a href="#" onclick="navigateTo('tutorials')">Project Builds</a></li>
-                        <li><a href="#">Supercars</a></li>
-                        <li><a href="#">Classics</a></li>
+                    <h4 style="margin-bottom: 1rem;">Explore</h4>
+                    <ul>
+                        <li><a href="reviews.html" style="color: #71717a; display: block; margin-bottom: 0.5rem;">Reviews</a></li>
+                        <li><a href="builds.html" style="color: #71717a; display: block; margin-bottom: 0.5rem;">Builds</a></li>
                     </ul>
                 </div>
-
                 <div>
-                    <h4 style="margin-bottom: 1.5rem;">Newsletter</h4>
-                    <p style="margin-bottom: 1rem; font-size: 0.9rem;">Get the latest automotive news weekly.</p>
-                    <div class="input-group">
-                        <input type="email" placeholder="Email address" class="input-field">
-                        <button class="btn btn-primary" style="padding: 0.5rem 1rem;">
-                            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
-                        </button>
-                    </div>
+                    <h4 style="margin-bottom: 1rem;">Legal</h4>
+                    <ul>
+                        <li><a href="#" style="color: #71717a; display: block; margin-bottom: 0.5rem;">Privacy</a></li>
+                        <li><a href="#" style="color: #71717a; display: block; margin-bottom: 0.5rem;">Terms</a></li>
+                    </ul>
                 </div>
             </div>
-            <div style="border-top: 1px solid var(--border-color); padding-top: 2rem; display: flex; justify-content: space-between; color: #52525b; font-size: 0.875rem;">
-                <p>&copy; 2024 TURBO Automotive. All rights reserved.</p>
-                <div class="flex gap-6">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                </div>
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #27272a; text-align: center; color: #52525b; font-size: 0.9rem;">
+                &copy; 2024 TURBO Automotive.
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript Logic -->
-    <script>
-        // --- Data ---
-        const POSTS = [
-            {
-                id: 1,
-                title: "The Electric Revolution: Beyond the Hype",
-                excerpt: "We test drive the latest EV hypercars to see if the soul of driving can survive without an internal combustion engine.",
-                content: `<p>The silence is deafening, but the acceleration is violent. As we transition into a fully electric future, enthusiasts are asking one critical question: Where is the emotion?</p><h3 class="text-white">Instant Torque</h3><p>There is no denying the performance benefits. 0-60 times have dropped below 2 seconds. But without the roar of a V12 or the whine of a supercharger, something feels missing.</p><h3>The Verdict</h3><p>EVs are technically superior, but for the weekend drive, we might still reach for the keys to the vintage manual.</p>`,
-                date: "Oct 12, 2024",
-                readTime: "5 min read",
-                tags: ["EV", "Hypercar", "Future"],
-                type: "article",
-                image: "https://images.unsplash.com/photo-1593055365545-2b46702e53bd?auto=format&fit=crop&q=80&w=800"
-            },
-            {
-                id: 2,
-                title: "Restoring a 1967 Shelby GT500",
-                excerpt: "A two-year journey of rust, sweat, and gears. How we brought an American legend back to life from a barn find.",
-                content: `<p>It started as a shell in a barn in Oklahoma. Mice had made a home in the intake manifold, and the floor pans were non-existent. But the VIN tag was authentic.</p><h3>The Teardown</h3><p>Every bolt was bagged and tagged. We sandblasted the chassis down to bare metal, revealing the scars of the last 50 years.</p><h3>First Start</h3><p>After a full engine rebuild, hearing that 428 Cobra Jet fire up for the first time was worth every scraped knuckle.</p>`,
-                date: "Nov 03, 2024",
-                readTime: "12 min read",
-                tags: ["Classic", "Restoration", "Muscle"],
-                type: "tutorial",
-                image: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?auto=format&fit=crop&q=80&w=800"
-            },
-            {
-                id: 3,
-                title: "Track Day Essentials: Under $30k",
-                excerpt: "You don't need a Porsche GT3 to have fun on the circuit. Here are our top 5 picks for budget track weapons.",
-                content: `<p>Racing is expensive, but it doesn't have to bankrupt you. We looked at the used market for cars that offer reliability, handling, and aftermarket support.</p><h3>The Mazda Miata (ND)</h3><p>The answer is always Miata. Lightweight, rear-wheel drive, and tires are cheap. It teaches you momentum driving like no other car.</p><h3>Honda Civic Type R</h3><p>If you need to haul groceries during the week and set lap records on Sunday, the hot hatch king still reigns supreme.</p>`,
-                date: "Dec 15, 2024",
-                readTime: "8 min read",
-                tags: ["Track", "Guide", "Budget"],
-                type: "tutorial",
-                image: "https://images.unsplash.com/photo-1532588213355-52317771cce6?auto=format&fit=crop&q=80&w=800"
-            },
-            {
-                id: 4,
-                title: "The Art of Aerodynamics",
-                excerpt: "Understanding downforce, drag coefficients, and how active aero is changing the way cars look and handle.",
-                content: `<p>Form follows function. In the world of high-speed automotive design, the air is your biggest enemy and your greatest ally.</p>`,
-                date: "Jan 20, 2025",
-                readTime: "6 min read",
-                tags: ["Design", "Engineering"],
-                type: "article",
-                image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=800"
-            }
-        ];
-
-        // --- State Management ---
-        let currentView = 'home';
-        
-        // --- Navigation Logic ---
-        function navigateTo(view, data = null) {
-            currentView = view;
-            window.scrollTo(0, 0);
-            
-            // Update active state in nav
-            document.querySelectorAll('.nav-link').forEach(link => {
-                if(link.getAttribute('onclick').includes(`'${view}'`)) {
-                    link.classList.add('active');
-                    link.style.color = 'white';
-                } else {
-                    link.classList.remove('active');
-                    link.style.color = '';
-                }
-            });
-
-            const contentEl = document.getElementById('app-content');
-            
-            // Router
-            if (view === 'home') {
-                contentEl.innerHTML = renderHome();
-            } else if (view === 'articles') {
-                contentEl.innerHTML = renderGrid('Reviews', POSTS.filter(p => p.type === 'article' || !p.type));
-            } else if (view === 'tutorials') {
-                contentEl.innerHTML = renderGrid('Builds & Guides', POSTS.filter(p => p.type === 'tutorial'));
-            } else if (view === 'about') {
-                contentEl.innerHTML = renderAbout();
-            } else if (view === 'post' && data) {
-                contentEl.innerHTML = renderPost(data);
-            }
-
-            // Re-initialize icons
-            lucide.createIcons();
-        }
-
-        function handleMobileNav(view) {
-            navigateTo(view);
-            document.getElementById('mobile-menu').classList.add('hidden');
-        }
-
-        // --- Render Functions ---
-
-        function renderHome() {
-            return `
-                <div class="fade-in">
-                    <!-- Hero Section -->
-                    <div class="hero">
-                        <div class="hero-bg-accent"></div>
-                        
-                        <div class="container" style="position: relative; z-index: 20;">
-                            <div class="grid md-grid-cols-2 items-center" style="gap: 4rem;">
-                                <div class="hero-content">
-                                    <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 99px; background: rgba(39, 39, 42, 0.5); border: 1px solid var(--border-color); color: var(--primary); font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.5rem;">
-                                        <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></span>
-                                        New Review Dropped
-                                    </div>
-                                    <h1 class="hero-title" style="line-height: 1.1; font-weight: 800; color: white;">
-                                        Drive the <br />
-                                        <span class="gradient-text">Extraordinary</span>
-                                    </h1>
-                                    <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 500px;">
-                                        A curated collection of automotive excellence. From vintage restoration projects to the cutting edge of hypercar technology.
-                                    </p>
-                                    <div class="flex gap-4">
-                                        <button onclick="navigateTo('articles')" class="btn btn-primary">
-                                            Read Reviews
-                                        </button>
-                                        <button onclick="navigateTo('tutorials')" class="btn btn-ghost">
-                                            View Builds <i data-lucide="arrow-right" style="width: 16px;"></i>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div class="hero-image-container md-block hidden">
-                                   <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=1000" alt="Hero Car">
-                                   <div style="position: absolute; bottom: 0; left: 0; padding: 2rem; width: 100%;">
-                                      <div style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); padding: 1.5rem; border-radius: 1rem; border: 1px solid rgba(255,255,255,0.1);">
-                                         <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; color: white;">Featured: McLaren P1</h3>
-                                         <p style="font-size: 0.875rem; color: var(--text-muted);">The hybrid hypercar that changed everything.</p>
-                                      </div>
-                                   </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Latest Posts Section -->
-                    <div style="background: #000; padding: 6rem 0;">
-                        <div class="container">
-                            <div class="flex justify-between items-center" style="margin-bottom: 3rem;">
-                                <div>
-                                    <h2 style="margin-bottom: 0.5rem; color: white;">Latest Stories</h2>
-                                    <p>Fresh from the track and the garage.</p>
-                                </div>
-                                <button onclick="navigateTo('articles')" class="btn btn-ghost" style="color: var(--primary);">
-                                    View all <i data-lucide="arrow-right" style="width: 16px;"></i>
-                                </button>
-                            </div>
-                            
-                            <div class="grid md-grid-cols-3">
-                                ${POSTS.slice(0, 3).map(post => createPostCard(post)).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function createPostCard(post) {
-            // Serialize for click handler
-            const postString = JSON.stringify(post).replace(/"/g, '&quot;');
-            
-            return `
-                <div onclick="navigateTo('post', ${postString})" class="card">
-                    <div class="card-image">
-                        <img src="${post.image}" alt="${post.title}">
-                        <div style="position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem;">
-                            ${post.tags.slice(0, 2).map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <div class="card-meta">
-                            <span><i data-lucide="calendar" style="width:12px; color: var(--primary);"></i> ${post.date}</span>
-                            <span><i data-lucide="clock" style="width:12px; color: var(--primary);"></i> ${post.readTime}</span>
-                        </div>
-                        <h3 class="card-title">${post.title}</h3>
-                        <p class="card-excerpt">${post.excerpt}</p>
-                        <div style="margin-top: auto; display: flex; align-items: center; font-size: 0.875rem; font-weight: 700; color: white;">
-                            Read Story <i data-lucide="chevron-right" style="width: 16px; margin-left: 4px; color: var(--primary);"></i>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderGrid(title, posts) {
-            return `
-                <div class="fade-in container" style="padding: 3rem 1.5rem;">
-                    <div style="margin-bottom: 4rem; padding-top: 2rem;">
-                        <h1 style="margin-bottom: 1rem;">${title}</h1>
-                        <p style="font-size: 1.25rem; max-width: 600px;">Browse our collection of ${title.toLowerCase()}. Filter by tags or search below.</p>
-                    </div>
-                    
-                    <div class="grid md-grid-cols-3">
-                        ${posts.map(post => createPostCard(post)).join('')}
-                    </div>
-                    
-                    ${posts.length === 0 ? '<div style="text-align: center; padding: 5rem; color: var(--text-muted);">No posts found.</div>' : ''}
-                </div>
-            `;
-        }
-
-        function renderPost(post) {
-            return `
-                <article class="fade-in article-view">
-                    <button onclick="navigateTo('home')" class="btn btn-ghost" style="padding-left: 0; margin-bottom: 2rem; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 1px;">
-                        <i data-lucide="arrow-left" style="width: 16px; margin-right: 0.5rem;"></i> Back to Home
-                    </button>
-                    
-                    <div class="article-header">
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-                             ${post.tags.map(tag => `<span style="background: var(--bg-card); border: 1px solid var(--border-color); padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">${tag}</span>`).join('')}
-                        </div>
-                        <h1 style="font-size: 2.5rem; margin-bottom: 1.5rem; line-height: 1.1;">${post.title}</h1>
-                        <div style="display: flex; gap: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 2rem; font-size: 0.875rem; color: var(--text-muted);">
-                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="calendar" style="width: 16px; color: var(--primary);"></i> ${post.date}</span>
-                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="clock" style="width: 16px; color: var(--primary);"></i> ${post.readTime}</span>
-                            <span style="display: flex; align-items: center; gap: 0.5rem;"><i data-lucide="user" style="width: 16px; color: var(--primary);"></i> Editor</span>
-                        </div>
-                    </div>
-
-                    <div class="article-image">
-                         <img src="${post.image}" alt="${post.title}">
-                    </div>
-
-                    <div class="prose">
-                        ${post.content}
-                    </div>
-                    
-                    <div style="margin-top: 5rem; padding-top: 3rem; border-top: 1px solid var(--border-color);">
-                        <h3 style="margin-bottom: 2rem;">Related Stories</h3>
-                        <div class="grid md-grid-cols-2">
-                             ${POSTS.filter(p => p.id !== post.id).slice(0, 2).map(p => createPostCard(p)).join('')}
-                        </div>
-                    </div>
-                </article>
-            `;
-        }
-        
-        function renderAbout() {
-            return `
-                <div class="fade-in article-view" style="text-align: center;">
-                    <h1 style="margin-bottom: 2rem;">About TURBO.</h1>
-                    <p style="font-size: 1.25rem; margin-bottom: 3rem; color: var(--text-muted);">
-                        We are a collective of petrolheads, mechanics, and designers passionate about internal combustion and electric innovation.
-                    </p>
-                    <div class="grid md-grid-cols-2" style="text-align: left;">
-                        <div style="background: var(--bg-card); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-color);">
-                            <i data-lucide="wrench" style="width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
-                            <h3 style="margin-bottom: 1rem; color: white;">Garage Built</h3>
-                            <p>We don't just write about cars; we work on them. Real experience, real grease, real results.</p>
-                        </div>
-                        <div style="background: var(--bg-card); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-color);">
-                             <i data-lucide="gauge" style="width: 32px; height: 32px; color: var(--primary); margin-bottom: 1rem;"></i>
-                            <h3 style="margin-bottom: 1rem; color: white;">Speed & Style</h3>
-                            <p>Focusing on the intersection of automotive performance and visual aesthetics.</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // --- Initialization ---
-        
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 20) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            const menu = document.getElementById('mobile-menu');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-            } else {
-                menu.classList.add('hidden');
-            }
-        });
-
-        // Start App
-        navigateTo('home');
-
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
